@@ -1,7 +1,7 @@
 # Phase6: タイトル画像生成
 
 ## 目的
-完成した記事本文をもとに、Noteのメイン画像（タイトル画像）を自動生成する
+完成した記事本文をもとに、Noteのメイン画像（タイトル画像）をGeminiで生成する
 
 ## 使い方
 
@@ -10,14 +10,18 @@ Phase5で校閲済みの最終版記事ファイルを指定してください�
 
 **対象ファイル:** `output/Phase5_校閲後_[日時].md`
 
+### 画像生成ツール
+**Google Gemini** (https://gemini.google.com/) を使用します。
+Geminiは高品質な画像生成に対応しており、1920×1006pxの画像生成が可能です。
+
 ---
 
-## AIへのプロンプト
+## AIへのプロンプト（Claude用 - 画像プロンプト作成まで）
 
 ```
 あなたはNote記事のビジュアルデザイナーです。
 
-完成した記事内容をもとに、魅力的なタイトル画像を生成します。
+完成した記事内容をもとに、Geminiで使用する画像生成プロンプトを作成します。
 
 **対象記事ファイル:** [Phase5の最終版ファイルパス]
 
@@ -60,9 +64,6 @@ Phase5で校閲済みの最終版記事ファイルを指定してください�
 - 物体（本、パソコン、コーヒーなど）
 - 抽象的なイメージ（成長、つながり、未来など）
 
-**回答:**
-[ここに入力]
-
 ---
 
 ## Q2: 入れ込みたい具体的な要素（任意）
@@ -74,16 +75,12 @@ Phase5で校閲済みの最終版記事ファイルを指定してください�
 - 植物や花
 - 幾何学的なパターン
 
-**回答:**
-[ここに入力]
 
 ---
 
 ## Q3: 避けたい要素（任意）
 画像に含めたくない要素があれば教えてください。
 
-**回答:**
-[ここに入力]
 ```
 
 ---
@@ -151,60 +148,96 @@ D. カスタム（複数のテイストを組み合わせ、または独自の�
 
 ---
 
-### ステップ5: 画像生成
+### ステップ5: Gemini用画像生成プロンプトの作成
 
 ユーザーがテイストを選択したら、以下を実行してください：
 
-1. 選択されたテイストとユーザーの要望をもとに、画像生成用のプロンプトを作成
-2. **1920×1006 ピクセル**のタイトル画像を生成
-3. 生成した画像を `output/Phase6_タイトル画像_v1_[日時].png` として保存
+1. 選択されたテイストとユーザーの要望をもとに、**Gemini用の画像生成プロンプト**を作成
+2. プロンプトをユーザーに提示
+3. ユーザーがGeminiで画像を生成
 
-**画像生成プロンプトの形式:**
+**Gemini用画像生成プロンプトの形式:**
 
 ```
-Create a title image for a Note article with the following specifications:
+Create a high-quality title image for a Note article with 1920×1006 pixels resolution.
 
-**Article Theme:** [記事テーマ]
-**Main Message:** [メインメッセージ]
-**Tone:** [記事のトーン: professional, casual, warm, inspiring, etc.]
+Article Theme: [記事テーマを英語で]
+Main Message: [メインメッセージを英語で]
 
-**Visual Elements:**
-- [シーン・物体の説明]
-- [具体的な要素]
+Visual Elements:
+- [シーン・物体の説明を英語で]
+- [具体的な要素を英語で]
 
-**Style:** [選択されたテイスト]
-- [スタイルの詳細説明]
-- [色使い: warm colors, cool tones, vibrant, pastel, etc.]
-- [構図: centered, rule of thirds, minimalist, etc.]
+Style: [選択されたテイスト]
+- [スタイルの詳細説明を英語で]
+- Color palette: [色使い: warm colors, cool tones, vibrant, pastel, etc.]
+- Composition: [構図: centered, rule of thirds, minimalist, etc.]
+- Atmosphere: [雰囲気: professional, casual, warm, inspiring, modern, etc.]
 
-**Composition:**
-- [配置の指示]
-- [空白やバランスの指示]
+Design requirements:
+- Clean and professional look suitable for business/design audience
+- Space for text overlay (if needed)
+- Eye-catching but not overwhelming
+- Suitable for social media sharing
 
-**Avoid:**
-- [避けたい要素]
+Avoid:
+- [避けたい要素を英語で]
+- Cluttered composition
+- Too much text
 
-**Technical Requirements:**
-- Size: 1920×1006 pixels
-- Format: PNG
+Image specifications:
+- Aspect ratio: 1920×1006 pixels (horizontal)
 - High resolution
-- Note article title image optimized
+- PNG format preferred
+```
+
+---
+
+### ステップ5-2: プロンプトの提示
+
+作成したプロンプトをユーザーに提示してください：
+
+```
+📝 Gemini用の画像生成プロンプトを作成しました！
+
+以下のプロンプトをコピーして、Gemini (https://gemini.google.com/) に貼り付けてください。
+
+---
+
+[作成したGemini用プロンプトをここに表示]
+
+---
+
+## 画像生成の手順
+
+1. https://gemini.google.com/ にアクセス
+2. 上記のプロンプトをコピー&ペースト
+3. 生成された画像を確認
+4. 気に入った画像をダウンロード（右クリック → 画像を保存）
+5. ダウンロードした画像を `output/Phase6_タイトル画像_v1_[日時].png` として保存
+
+## ヒント
+- Geminiで複数枚生成して、最も良いものを選べます
+- 気に入らない場合は、プロンプトの一部を調整して再生成できます
+- 「もっと明るく」「もっとシンプルに」などの追加指示も可能です
+
+画像を生成したら教えてください！
 ```
 
 ---
 
 ### ステップ6: 画像の確認と調整
 
-画像生成後、以下のメッセージを表示してください：
+ユーザーがGeminiで画像を生成した後、以下のメッセージを表示してください：
 
 ```
-✅ タイトル画像を生成しました。
+画像を生成していただきありがとうございます！
 
 📷 画像ファイル: output/Phase6_タイトル画像_v1_[日時].png
-📐 サイズ: 1920×1006 px
+📐 推奨サイズ: 1920×1006 px
 🎨 テイスト: [選択されたテイスト]
 
-画像を確認してください。
+画像の仕上がりはいかがでしたか？
 
 満足度を教えてください:
 A. 完璧！このまま使用する
@@ -251,7 +284,25 @@ Note記事の準備が整いました！
 [ここに入力]
 ```
 
-調整内容をもとに画像を再生成し、`v2`として保存
+調整内容をもとに、修正したプロンプトを作成して提示：
+
+```
+📝 調整したGemini用プロンプト（v2）
+
+以下のプロンプトでGeminiに再度画像を生成してください：
+
+---
+
+[調整したプロンプト]
+
+---
+
+前回の画像との違い:
+- [調整ポイント1]
+- [調整ポイント2]
+
+生成したら `output/Phase6_タイトル画像_v2_[日時].png` として保存してください。
+```
 
 ---
 
@@ -266,7 +317,25 @@ Note記事の準備が整いました！
 [ここに入力]
 ```
 
-新しい指示をもとに画像を再生成し、`v2`として保存
+新しい指示をもとに、全く新しいプロンプトを作成して提示：
+
+```
+📝 新しいGemini用プロンプト（v2）
+
+以下のプロンプトでGeminiに画像を生成してください：
+
+---
+
+[新しいプロンプト]
+
+---
+
+変更点:
+- [変更ポイント1]
+- [変更ポイント2]
+
+生成したら `output/Phase6_タイトル画像_v2_[日時].png` として保存してください。
+```
 
 ---
 
@@ -310,7 +379,7 @@ Note記事の準備が整いました！
 
 ---
 
-画像生成を開始してください。
+プロンプト作成を開始してください。
 ```
 
 ---
@@ -319,6 +388,9 @@ Note記事の準備が整いました！
 - [ ] 記事内容が分析されているか
 - [ ] ユーザーへのヒアリングが行われているか
 - [ ] 3つの画像テイストが提案されているか
+- [ ] Gemini用の画像生成プロンプトが作成されているか
+- [ ] プロンプトが英語で記述されているか
+- [ ] ユーザーがGeminiで画像を生成できたか
 - [ ] 1920×1006 pxの画像が生成されているか
 - [ ] 画像ファイルが `output`フォルダに保存されているか
 - [ ] 画像のクオリティが適切か
@@ -329,6 +401,47 @@ Note記事の準備が整いました！
 - **サイズ:** 1920×1006 px（Note推奨サイズ）
 - **フォーマット:** PNG
 - **用途:** Note記事のメインビジュアル（サムネイル）
+- **生成ツール:** Google Gemini (https://gemini.google.com/)
+
+---
+
+## Geminiでの画像生成のコツ
+
+### 良いプロンプトの書き方
+1. **具体的に記述** - 抽象的な表現を避け、具体的な要素を指定
+2. **スタイルを明確に** - 写実的、イラスト風、ミニマルなど
+3. **色使いを指定** - warm colors, pastel tones, vibrant など
+4. **構図を指定** - centered, rule of thirds, wide shot など
+5. **雰囲気を表現** - professional, casual, inspiring など
+
+### Geminiの特徴
+- **高品質な画像生成** - 詳細で美しい画像が生成可能
+- **複数生成可能** - 一度に複数パターン生成できる
+- **対話的な調整** - 「もっと明るく」などの追加指示が可能
+- **日本語対応** - 日本語プロンプトでも生成可能（英語推奨）
+
+### トラブルシューティング
+**Q: 画像サイズが指定通りにならない**
+A: Geminiで生成後、画像編集ソフトで1920×1006pxにリサイズしてください。
+
+**Q: イメージと違う画像が生成される**
+A: プロンプトをより具体的に調整するか、複数生成して選んでください。
+
+**Q: Geminiにアクセスできない**
+A: Google アカウントでログインが必要です。または、DALL-E、Midjourney等の代替ツールも使用可能。
+
+---
+
+## 代替ツール（参考）
+
+Geminiが使用できない場合の代替案：
+
+1. **DALL-E (ChatGPT Plus)** - https://chat.openai.com/
+2. **Midjourney** - https://www.midjourney.com/
+3. **Stable Diffusion** - https://stablediffusionweb.com/
+4. **Canva AI** - https://www.canva.com/ (デザインツールと併用)
+
+いずれも同様のプロンプト形式が使用できます。
 
 ---
 
